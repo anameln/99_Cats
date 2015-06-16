@@ -1,0 +1,19 @@
+<h1> <%= @cat.name %> </h1>
+
+<% display_rows = [:sex, :color, :age] %>
+
+<table>
+  <% display_rows.each do |row| %>
+    <tr>
+      <th>
+        <%= row.to_s + ":" %>
+      </th>
+      <td>
+        <%= @cat.send(row) %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<h4>Description</h4>
+<p> <%= @cat.description %> </p>
