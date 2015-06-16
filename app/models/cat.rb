@@ -38,4 +38,16 @@ class Cat < ActiveRecord::Base
     (Time.now.year - birth_date.to_time.year)
   end
 
+  def pending_requests
+    rental_requests.where("status = 'PENDING'")
+  end
+
+  def approved_requests
+    rental_requests.where("status = 'APPROVED'")
+  end
+
+  def denied_requests
+    rental_requests.where("status = 'DENIED'")
+  end
+
 end

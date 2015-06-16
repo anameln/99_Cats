@@ -1,0 +1,14 @@
+<% show_params = [:start_date, :end_date] %>
+
+<% show_params.each do |param| %>
+  <table>
+    <tr>
+      <th>
+        <%= param %>
+      </th>
+      <td>
+        <%= request.send(param) %>
+      </td>
+    </tr>
+  </table>
+<% end %>

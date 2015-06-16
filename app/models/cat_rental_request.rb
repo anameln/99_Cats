@@ -17,46 +17,52 @@ class CatRentalRequest < ActiveRecord::Base
 
   STATUS = [
     'PENDING',
-    'APROVED',
+    'APPROVED',
     'DENIED'
   ]
 
   validates :start_date, :end_date, :cat_id, :status, presence: true
   validates :status, inclusion: STATUS
-  # validate :request_does_not_overlap
+  validate :request_does_not_overlap
+  after_initialize :default_status
 
+  def request_does_not_overlap
+    errors.add(:time, "overlaps") unless approved? && approved_overlapping_requests.empty?
+  end
 
   def overlapping_requests
-    CatRentalRequest.find_by_sql([<<-SQL, start_date: start_date, end_date: end_date, id: id])
-      SELECT
-        *
-      FROM
-        cat_rental_requests
-      WHERE
-        NOT (end_date < :start_date OR start_date > :end_date) AND
-        id != :id
+    CatRentalRequest.where([<<-SQL, start_date: start_date, end_date: end_date, id: id])
+      NOT (end_date < :start_date OR start_date > :end_date) AND id != :id
     SQL
   end
 
-  def request_does_not_overlap
-    errors.add("") if overlapping_aproved_requests?
+  def approved_overlapping_requests
+    overlapping_requests.where("status = ?", "APPROVED")
   end
 
-  def other_aproved_rental_requests
-    cat.rental_requests.select!(&:aproved?).delete(self)
+  def not_approved_overlapping_requests
+    overlapping_requests.where("status = ?", "PENDING")
   end
 
-  def conflicts?(another_request)
-    !(another_request.start_date > end_date ||
-      another_request.end_date < start_date)
+  def default_status
+    self.status ||= "PENDING"
   end
 
-  def overlapping_aproved_requests?(other_rental_requests)
-    other_aproved_rental_requests.any?(&:conflicts?)
+  def approve!
+    ActiveRecord::Base.transaction do
+      self.status = 'APPROVED'
+      self.save!
+      not_approved_overlapping_requests.each(&:deny!)
+    end
   end
 
-  def aproved?
-    status == 'APROVED'
+  def approved?
+    status == "APPROVED"
+  end
+
+  def deny!
+    self.status = "DENIED"
+    self.save
   end
 
 end

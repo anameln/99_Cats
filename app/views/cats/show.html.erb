@@ -17,3 +17,31 @@
 
 <h4>Description</h4>
 <p> <%= @cat.description %> </p>
+
+<h3>Pending requests</h3>
+<% @cat.pending_requests.each do |request| %>
+  <%= render "cat_rental_requests/show", request: request %>
+
+  <table>
+  <form action="<%= deny_cat_rental_request_url(request) %>" method="post">
+    <input type="hidden" name="cat_id" value="<%= @cat.id %>">
+    <button>Deny request</button>
+  </form>
+
+  <form action="<%= approve_cat_rental_request_url(request) %>" method="post">
+    <input type="hidden" name="cat_id" value="<%= @cat.id %>">
+    <button>Aprove request</button>
+  </form>
+
+  <br>
+<% end %>
+<br>
+<h3>Approved requests</h3>
+<% @cat.approved_requests.each do |request| %>
+  <%= render "cat_rental_requests/show", request: request %>
+<% end %>
+<br>
+<h3>Denied requests</h3>
+<% @cat.denied_requests.each do |request| %>
+  <%= render "cat_rental_requests/show", request: request %>
+<% end %>
