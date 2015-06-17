@@ -8,6 +8,9 @@
   <% if patch %>
     <input type='hidden' name='_method' value='PUT'>
   <% end %>
+  
+  <%= auth_token_input %>
+
   <label for="cats_name">Name:</label>
   <input type="text" name="cat[name]" value="<%= cat.name %>" id="cats_name">
 

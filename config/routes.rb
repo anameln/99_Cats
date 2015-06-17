@@ -8,5 +8,7 @@ Cats::Application.routes.draw do
     end
   end
 
+  resources :users
+  resource :session, only: [:create, :destroy, :new]
 
 end

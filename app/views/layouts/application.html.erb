@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cats</title>
+  <title><%= current_user.nil? ? "Log in" : current_user.user_name %></title>
   <!-- <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %> -->
 </head>
   <body>
+    <% if logged_in? %>
+      <form action="<%=session_url%>" method="post">
+        <input type="hidden" name="_method" value="DELETE">
+        <%= auth_token_input %>
+        <button>Log out</button>
+      </form>
+    <% end %>
 
     <%= yield %>
 

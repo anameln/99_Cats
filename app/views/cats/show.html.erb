@@ -25,11 +25,17 @@
   <table>
   <form action="<%= deny_cat_rental_request_url(request) %>" method="post">
     <input type="hidden" name="cat_id" value="<%= @cat.id %>">
+
+    <%= auth_token_input %>
+
     <button>Deny request</button>
   </form>
 
   <form action="<%= approve_cat_rental_request_url(request) %>" method="post">
     <input type="hidden" name="cat_id" value="<%= @cat.id %>">
+
+    <%= auth_token_input %>
+
     <button>Aprove request</button>
   </form>
 
