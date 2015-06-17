@@ -8,11 +8,14 @@
 #  description :text
 #  birth_date  :date
 #  color       :string(255)      not null
+#  owner_id    :integer
 #
 
 class Cat < ActiveRecord::Base
   has_many :rental_requests, dependent: :destroy,
     class_name: "CatRentalRequest"
+
+  belongs_to :owner, class_name: 'User'
 
   COLORS = [
               "Brown",

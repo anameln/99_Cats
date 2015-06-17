@@ -11,26 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150617144920) do
+ActiveRecord::Schema.define(version: 20150617204638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "cat_rental_requests", force: true do |t|
-    t.integer  "cat_id",                         null: false
-    t.datetime "start_date",                     null: false
-    t.datetime "end_date",                       null: false
-    t.string   "status",     default: "PENDING"
+    t.integer  "cat_id",                           null: false
+    t.datetime "start_date",                       null: false
+    t.datetime "end_date",                         null: false
+    t.string   "status",       default: "PENDING"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "requester_id"
   end
 
   create_table "cats", force: true do |t|
-    t.string "name",        null: false
-    t.string "sex",         null: false
-    t.text   "description"
-    t.date   "birth_date"
-    t.string "color",       null: false
+    t.string  "name",        null: false
+    t.string  "sex",         null: false
+    t.text    "description"
+    t.date    "birth_date"
+    t.string  "color",       null: false
+    t.integer "owner_id"
   end
 
   create_table "users", force: true do |t|

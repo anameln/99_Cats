@@ -14,6 +14,10 @@ require 'bcrypt'
 
 class User < ActiveRecord::Base
 
+  has_many :cats, foreign_key: :owner_id, dependent: :destroy
+  has_many :rental_requests, class_name:"CatRentalRequest",
+            foreign_key: "requester_id", dependent: :destroy
+
   validates :user_name, :session_token, presence: true, uniqueness: true
   validates :password, length: { minimum: 6, allow_nil: true }
   validates :password_digest, presence: :true

@@ -2,18 +2,20 @@
 #
 # Table name: cat_rental_requests
 #
-#  id         :integer          not null, primary key
-#  cat_id     :integer          not null
-#  start_date :datetime         not null
-#  end_date   :datetime         not null
-#  status     :string(255)      default("PENDING")
-#  created_at :datetime
-#  updated_at :datetime
+#  id           :integer          not null, primary key
+#  cat_id       :integer          not null
+#  start_date   :datetime         not null
+#  end_date     :datetime         not null
+#  status       :string(255)      default("PENDING")
+#  created_at   :datetime
+#  updated_at   :datetime
+#  requester_id :integer
 #
 
 class CatRentalRequest < ActiveRecord::Base
 
   belongs_to :cat
+  belongs_to :requester, class_name:'User'
 
   STATUS = [
     'PENDING',
@@ -21,7 +23,7 @@ class CatRentalRequest < ActiveRecord::Base
     'DENIED'
   ]
 
-  validates :start_date, :end_date, :cat_id, :status, presence: true
+  validates :start_date, :end_date, :cat_id, :status, :requester_id, presence: true
   validates :status, inclusion: STATUS
   validate :request_does_not_overlap
   after_initialize :default_status
