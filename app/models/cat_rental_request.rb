@@ -27,7 +27,7 @@ class CatRentalRequest < ActiveRecord::Base
   after_initialize :default_status
 
   def request_does_not_overlap
-    errors.add(:time, "overlaps") unless approved? && approved_overlapping_requests.empty?
+    errors.add(:time, "overlaps") unless !approved? || approved_overlapping_requests.empty?
   end
 
   def overlapping_requests
